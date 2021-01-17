@@ -3,22 +3,17 @@ import chalk from 'chalk'
 import dotenv from 'dotenv'
 dotenv.config()
 
-import products from './data/products.js'
+import connectToDB from './db/index.js'
+import ProductRoutes from './routes/product-routes.js'
 
 const app = express()
+connectToDB()
 
 app.get('/', (req, res) => {
   res.send('API is live!')
 })
 
-app.get('/api/products', (req, res) => {
-  res.json(products)
-})
-
-app.get('/api/products/:id', (req, res) => {
-  const product = products.find(p => p._id === req.params.id)
-  res.json(product)
-})
+app.use('/api', ProductRoutes)
 
 const PORT = process.env.PORT || 1234
 const ENV = process.env.NODE_ENV
