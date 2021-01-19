@@ -1,26 +1,29 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import React, { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Row, Col, Image, ListGroup, Card, Button } from 'react-bootstrap'
 
+// Redux
+import { useDispatch, useSelector } from 'react-redux'
+import { getProductDetails } from '../redux/actions/product-actions'
+
+// Components
 import Rating from '../components/Rating'
+import Loader from '../components/Loader'
+import Message from '../components/Message'
 
 const Product = () => {
   const { id } = useParams()
-  const [product, setProduct] = useState({})
+  const dispatch = useDispatch()
+  const { loading, product, error } = useSelector(state => state.productDetails)
 
   useEffect(() => {
-    axios.get(`/api/products/${id}`).then(res => {
-      setProduct(res.data)
-    })
-  }, [id])
+    dispatch(getProductDetails(id))
+  }, [dispatch, id])
 
-  return (
-    <>
-      <Link className='btn btn-light my-3' to='/'>
-        Back
-      </Link>
-
+  const renderContent = () => {
+    if (loading) return <Loader />
+    if (error) return <Message variant='danger'>{error}</Message>
+    return (
       <Row>
         <Col md={12} lg={6}>
           <Image src={product.image} alt={product.name} fluid />
@@ -74,6 +77,15 @@ const Product = () => {
           </Card>
         </Col>
       </Row>
+    )
+  }
+
+  return (
+    <>
+      <Link className='btn btn-light my-3' to='/'>
+        Back
+      </Link>
+      {renderContent()}
     </>
   )
 }

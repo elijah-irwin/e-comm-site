@@ -4,14 +4,14 @@ import { Container } from 'react-bootstrap'
 
 import Header from './components/Header'
 import Footer from './components/Footer'
-import Home from './views/Home'
-import Product from './views/Product'
+import Home from './views/home-view'
+import Product from './views/product-view'
 
 const App = () => {
   return (
     <Router>
       <Header />
-      <Container className='py-3'>
+      <Container className='py-3 main-content'>
         <Switch>
           <Route exact path='/'>
             <Home />
