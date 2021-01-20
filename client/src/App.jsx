@@ -4,8 +4,10 @@ import { Container } from 'react-bootstrap'
 
 import Header from './components/Header'
 import Footer from './components/Footer'
+
 import Home from './views/home-view'
 import Product from './views/product-view'
+import Cart from './views/cart-view'
 
 const App = () => {
   return (
@@ -13,12 +15,9 @@ const App = () => {
       <Header />
       <Container className='py-3 main-content'>
         <Switch>
-          <Route exact path='/'>
-            <Home />
-          </Route>
-          <Route path='/product/:id'>
-            <Product />
-          </Route>
+          <Route exact path='/' component={Home} />
+          <Route path='/product/:id' component={Product} />
+          <Route path='/cart/:id?' component={Cart} />
         </Switch>
       </Container>
       <Footer />
