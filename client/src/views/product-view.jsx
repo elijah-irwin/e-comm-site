@@ -20,6 +20,8 @@ const Product = ({ history }) => {
 
   useEffect(() => {
     dispatch(getProductDetails(id))
+
+    // return dispatch to clear product details state so its clear for next renders
   }, [dispatch, id])
 
   const addToCart = () => {
@@ -32,7 +34,12 @@ const Product = ({ history }) => {
     return (
       <Row>
         <Col md={12} lg={6}>
-          <Image src={product.image} alt={product.name} fluid />
+          <Image
+            src={product.image}
+            alt={product.name}
+            fluid
+            style={{ width: '100%' }}
+          />
         </Col>
 
         <Col md={12} lg={3}>
