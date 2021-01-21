@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import chalk from 'chalk'
 
 const connectToDB = () => {
-  mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+  mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
     .then(() => {
       console.log(chalk.blue('[db] Successfully connected to the database.'))
     })
