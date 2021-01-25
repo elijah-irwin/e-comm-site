@@ -59,5 +59,27 @@ router.get('/users/profile', authenticate, asyncHandler(async (req, res) => {
   res.json(req.user)
 }))
 
+// @desc    Updates a user's profile
+// @route   PUT /api/users/profile
+// @access  Private
+router.put('/users/profile', authenticate, asyncHandler(async (req, res) => {
+  const user = req.user
+
+  user.name = req.body.name || user.name
+  user.email = req.body.email || user.email
+  if (req.body.password)
+    user.password = req.body.password
+
+  const updatedUser = await user.save()
+  res.json({
+    _id: updatedUser._id,
+    name: updatedUser.name,
+    email: updatedUser.email,
+    isAdmin: updatedUser.isAdmin,
+    token: generateToken(updatedUser._id)
+  })
+}))
+
+
 
 export default router

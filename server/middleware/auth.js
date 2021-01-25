@@ -6,8 +6,14 @@ export const authenticate = asyncHandler(async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1]
     const validatedToken = jwt.verify(token, process.env.JWT_SECRET)
-    req.user = await User.findById(validatedToken.userId).select('-password')
-    next()
+    const user = await User.findById(validatedToken.userId).select('-password')
+    if (user) {
+      req.user = user
+      next()
+    } else {
+      res.status(404)
+      throw new Error('No user found with the provided token.')
+    }
   }
 
   catch (e) {
