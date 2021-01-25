@@ -1,6 +1,5 @@
 import express from 'express'
 import asyncHandler from 'express-async-handler'
-import jwt from 'jsonwebtoken'
 const router = express.Router()
 
 import User from '../models/user-model.js'
@@ -21,12 +20,13 @@ router.post('/users', asyncHandler(async (req, res) => {
 
   // Create new user
   const newUser = await new User({ name, email, password }).save()
+
   res.status(201).json({
     _id: newUser._id,
     name: newUser.name,
     email: newUser.email,
     isAdmin: newUser.isAdmin,
-    token: generateToken(user._id)
+    token: generateToken(newUser._id)
   })
 
 }))

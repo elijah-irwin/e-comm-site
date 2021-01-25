@@ -16,6 +16,7 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(listProducts())
+    // cleannup product list data here so it does dbl flash on reload
   }, [dispatch])
 
   const renderContent = () => {

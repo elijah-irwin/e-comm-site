@@ -5,22 +5,25 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 // Reducers
 import { productListReducer, productDetailsReducer } from './reducers/product-reducers'
 import { cartReducer } from './reducers/cart-reducers'
+import { userReducer } from './reducers/user-reducers'
 
 const reducer = combineReducers({
   // key here is actual variable name of the state
   productList: productListReducer,
   productDetails: productDetailsReducer,
-  cart: cartReducer
+  cart: cartReducer,
+  user: userReducer
 })
 
 const cartItemsFromLocalStorage = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : []
+const userFromLocalStorage = localStorage.getItem('userDetails') ? JSON.parse(localStorage.getItem('userDetails')) : null
 
 const initialState = {
-  cart: { cartItems: cartItemsFromLocalStorage }
+  cart: { cartItems: cartItemsFromLocalStorage },
+  user: { userDetails: userFromLocalStorage }
 }
 
 const middleware = [thunk]
-
 const store = createStore(reducer, initialState, composeWithDevTools(applyMiddleware(...middleware)))
 
 export default store
