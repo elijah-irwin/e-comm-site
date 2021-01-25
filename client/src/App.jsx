@@ -11,6 +11,7 @@ import Product from './views/product-view'
 import Cart from './views/cart-view'
 import Login from './views/login-view'
 import Register from './views/register-view'
+import Profile from './views/profile-view'
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
           <Route exact path='/' component={Home} />
           <Route path='/login' component={Login} />
           <Route path='/register' component={Register} />
+          <Route path='/profile' component={Profile} />
           <Route path='/product/:id' component={Product} />
           <Route path='/cart/:id?' component={Cart} />
         </Switch>

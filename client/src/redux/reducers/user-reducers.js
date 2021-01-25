@@ -1,4 +1,15 @@
-import { USER_LOGIN_ERROR, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_REGISTER_ERROR, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS } from "../constants"
+import {
+  USER_LOGIN_ERROR,
+  USER_LOGIN_REQUEST,
+  USER_LOGIN_SUCCESS,
+  USER_LOGOUT,
+  USER_REGISTER_ERROR,
+  USER_REGISTER_REQUEST,
+  USER_REGISTER_SUCCESS,
+  USER_UPDATE_REQUEST,
+  USER_UPDATE_SUCCESS,
+  USER_UPDATE_ERROR
+} from '../constants'
 
 export const userReducer = (state = {}, action) => {
   switch (action.type) {
@@ -21,6 +32,16 @@ export const userReducer = (state = {}, action) => {
 
     case USER_REGISTER_ERROR:
       return { loading: false, error: action.payload }
+
+    // UPDATE 
+    case USER_UPDATE_REQUEST:
+      return { ...state, loading: true }
+
+    case USER_UPDATE_SUCCESS:
+      return { loading: false, success: true, userDetails: action.payload }
+
+    case USER_UPDATE_ERROR:
+      return { ...state, loading: false, error: action.payload }
 
     // LOGOUT
     case USER_LOGOUT:

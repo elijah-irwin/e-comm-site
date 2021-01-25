@@ -71,6 +71,7 @@ router.put('/users/profile', authenticate, asyncHandler(async (req, res) => {
     user.password = req.body.password
 
   const updatedUser = await user.save()
+
   res.json({
     _id: updatedUser._id,
     name: updatedUser.name,
