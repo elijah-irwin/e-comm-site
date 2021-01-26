@@ -12,6 +12,7 @@ const Header = ({ history }) => {
 
   const userLogout = () => {
     dispatch(logout())
+    window.location.pathname = '/'
   }
 
   const renderSignIn = () => {
