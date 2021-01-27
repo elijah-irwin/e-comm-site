@@ -11,7 +11,12 @@ import CheckoutSteps from '../components/CheckoutSteps'
 
 const Shipping = ({ history }) => {
   // Shipping Address
-  const [shipping, setShipping] = useState({})
+  const [shipping, setShipping] = useState({
+    address: '',
+    city: '',
+    postalCode: '',
+    country: '',
+  })
 
   // Redux
   const { shippingAddress } = useSelector(state => state.cart)

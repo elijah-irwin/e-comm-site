@@ -2,11 +2,11 @@ import React from 'react'
 import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
-// Reduc
+// Redux
 import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../redux/actions/user-actions'
 
-const Header = ({ history }) => {
+const Header = () => {
   const dispatch = useDispatch()
   const { userDetails } = useSelector(state => state.user)
 

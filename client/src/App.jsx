@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 
+// Components
 import Header from './components/Header'
 import Footer from './components/Footer'
 
@@ -13,6 +14,7 @@ import Login from './views/login-view'
 import Register from './views/register-view'
 import Profile from './views/profile-view'
 import Shipping from './views/shipping-view'
+import Payment from './views/payment-view'
 
 const App = () => {
   return (
@@ -27,6 +29,7 @@ const App = () => {
           <Route path='/product/:id' component={Product} />
           <Route path='/cart/:id?' component={Cart} />
           <Route path='/shipping' component={Shipping} />
+          <Route path='/payment' component={Payment} />
         </Switch>
       </Container>
       <Footer />
