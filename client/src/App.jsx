@@ -15,6 +15,7 @@ import Register from './views/register-view'
 import Profile from './views/profile-view'
 import Shipping from './views/shipping-view'
 import Payment from './views/payment-view'
+import PlaceOrder from './views/place-order-view'
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
           <Route path='/cart/:id?' component={Cart} />
           <Route path='/shipping' component={Shipping} />
           <Route path='/payment' component={Payment} />
+          <Route path='/place-order' component={PlaceOrder} />
         </Switch>
       </Container>
       <Footer />
