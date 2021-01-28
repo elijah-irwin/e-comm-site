@@ -10,23 +10,23 @@ import Order from '../models/order-model.js'
 // @access  Private
 router.post('/orders', authenticate, asyncHandler(async (req, res) => {
   const {
-    orderItems,
+    cartItems,
     shippingAddress,
     paymentMethod,
     itemsPrice,
-    taxPrice,
     shippingPrice,
+    taxPrice,
     totalPrice
   } = req.body
 
-  if (!orderItems || orderItems.length === 0) {
+  if (!cartItems || cartItems.length === 0) {
     res.status(400)
     throw new Error('No items in order.')
   }
 
   const order = new Order({
     user: req.user._id,
-    orderItems,
+    orderItems: cartItems,
     shippingAddress,
     paymentMethod,
     itemsPrice,
@@ -37,6 +37,20 @@ router.post('/orders', authenticate, asyncHandler(async (req, res) => {
 
   const createdOrder = await order.save()
   res.status(201).json(createdOrder)
+}))
+
+// @desc    Get order by ID
+// @route   GET /api/orders/:id
+// @access  Private
+router.get('/orders/:id', authenticate, asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id)
+
+  if (!order) {
+    res.status(404)
+    throw new Error(`Order '${req.params.id}' not found.`)
+  }
+
+  res.json(order)
 }))
 
 export default router

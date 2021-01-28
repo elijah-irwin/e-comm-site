@@ -1,19 +1,28 @@
-import React from 'react'
-import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
+import React, { useEffect } from 'react'
+import {
+  Button,
+  Row,
+  Col,
+  ListGroup,
+  Image,
+  Card,
+  Spinner,
+} from 'react-bootstrap'
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux'
-import { placeOrder } from '../redux/actions/cart-actions'
+import { createOrder } from '../redux/actions/order-actions'
 
 // Components
-import FormContainer from '../components/FormContainer'
 import CheckoutSteps from '../components/CheckoutSteps'
-import { Collection } from 'mongoose'
 import { Link } from 'react-router-dom'
+import Message from '../components/Message'
 
-const PlaceOrder = () => {
+const PlaceOrder = ({ history }) => {
   // Redux
+  const dispatch = useDispatch()
   const cart = useSelector(state => state.cart)
+
   cart.itemsPrice = cart.cartItems.reduce(
     (acc, item) => acc + item.price * item.qty,
     0
@@ -28,8 +37,15 @@ const PlaceOrder = () => {
     Number(cart.taxPrice)
   ).toFixed(2)
 
+  const { order, success, loading, error } = useSelector(state => state.order)
+
+  useEffect(() => {
+    if (success) history.push(`/order/${order._id}`)
+    // eslint-disable-next-line
+  }, [history, success])
+
   const placeOrderHandler = () => {
-    console.log('yo')
+    dispatch(createOrder(cart))
   }
 
   return (
@@ -113,15 +129,30 @@ const PlaceOrder = () => {
                 </Row>
               </ListGroup.Item>
 
+              {error && (
+                <ListGroup.Item>
+                  <Message variant='danger' style={{ marginBottom: '0px' }}>
+                    {error}
+                  </Message>
+                </ListGroup.Item>
+              )}
+
               <ListGroup.Item>
-                <Button
-                  type='button'
-                  className='btn-block'
-                  disabled={cart.cartItems.length === 0}
-                  onClick={placeOrderHandler}
-                >
-                  Place Order
-                </Button>
+                {!loading ? (
+                  <Button
+                    type='button'
+                    className='btn-block'
+                    disabled={cart.cartItems.length === 0}
+                    onClick={placeOrderHandler}
+                  >
+                    Place Order
+                  </Button>
+                ) : (
+                  <Spinner
+                    animation='border'
+                    style={{ display: 'block', margin: 'auto' }}
+                  />
+                )}
               </ListGroup.Item>
             </ListGroup>
           </Card>

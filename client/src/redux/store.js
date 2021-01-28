@@ -6,13 +6,15 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import { productListReducer, productDetailsReducer } from './reducers/product-reducers'
 import { cartReducer } from './reducers/cart-reducers'
 import { userReducer } from './reducers/user-reducers'
+import { orderReducer } from './reducers/order-reducers'
 
 const reducer = combineReducers({
   // key here is actual variable name of the state
   productList: productListReducer,
   productDetails: productDetailsReducer,
   cart: cartReducer,
-  user: userReducer
+  user: userReducer,
+  order: orderReducer
 })
 
 const cartItemsFromLocalStorage = localStorage.getItem('cartItems')
