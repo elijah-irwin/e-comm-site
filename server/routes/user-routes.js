@@ -81,6 +81,4 @@ router.put('/users/profile', authenticate, asyncHandler(async (req, res) => {
   })
 }))
 
-
-
 export default router

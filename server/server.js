@@ -8,6 +8,7 @@ dotenv.config()
 import connectToDB from './db/index.js'
 import ProductRoutes from './routes/product-routes.js'
 import UserRoutes from './routes/user-routes.js'
+import OrderRoutes from './routes/order-routes.js'
 import { errorHandler, routeNotFound } from './middleware/error-handlers.js'
 
 // Init App & Connect to DB
@@ -23,6 +24,7 @@ app.get('/', (req, res) => {
 // Specific Routes
 app.use('/api', ProductRoutes)
 app.use('/api', UserRoutes)
+app.use('/api', OrderRoutes)
 
 // Error Handlers
 app.use(routeNotFound)

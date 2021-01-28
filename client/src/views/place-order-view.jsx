@@ -22,7 +22,6 @@ const PlaceOrder = () => {
   cart.taxPrice = Number((cart.itemsPrice + cart.shippingPrice) * 0.13).toFixed(
     2
   )
-
   cart.totalPrice = (
     cart.itemsPrice +
     cart.shippingPrice +
