@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import {
   Button,
   Row,
@@ -15,7 +16,6 @@ import { createOrder } from '../redux/actions/order-actions'
 
 // Components
 import CheckoutSteps from '../components/CheckoutSteps'
-import { Link } from 'react-router-dom'
 import Message from '../components/Message'
 
 const PlaceOrder = ({ history }) => {
@@ -37,7 +37,9 @@ const PlaceOrder = ({ history }) => {
     Number(cart.taxPrice)
   ).toFixed(2)
 
-  const { order, success, loading, error } = useSelector(state => state.order)
+  const { order, success, loading, error } = useSelector(
+    state => state.orderCreate
+  )
 
   useEffect(() => {
     if (success) history.push(`/order/${order._id}`)
@@ -77,8 +79,8 @@ const PlaceOrder = ({ history }) => {
               <ListGroup variant='flush'>
                 {cart.cartItems.map((item, index) => (
                   <ListGroup.Item key={index}>
-                    <Row>
-                      <Col md={1}>
+                    <Row style={{ alignItems: 'center' }}>
+                      <Col md={2}>
                         <Image src={item.image} alt={item.name} fluid rounded />
                       </Col>
                       <Col>
@@ -131,7 +133,7 @@ const PlaceOrder = ({ history }) => {
 
               {error && (
                 <ListGroup.Item>
-                  <Message variant='danger' style={{ marginBottom: '0px' }}>
+                  <Message variant='danger' noMargin>
                     {error}
                   </Message>
                 </ListGroup.Item>

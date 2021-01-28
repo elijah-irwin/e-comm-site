@@ -1,10 +1,13 @@
 import {
   ORDER_CREATE_REQUEST,
   ORDER_CREATE_SUCCESS,
-  ORDER_CREATE_ERROR
+  ORDER_CREATE_ERROR,
+  ORDER_DETAILS_REQUEST,
+  ORDER_DETAILS_SUCCESS,
+  ORDER_DETAILS_ERROR
 } from '../constants'
 
-export const orderReducer = (state = {}, action) => {
+export const orderCreateReducer = (state = {}, action) => {
   switch (action.type) {
     case ORDER_CREATE_REQUEST:
       return { loading: true }
@@ -17,6 +20,37 @@ export const orderReducer = (state = {}, action) => {
       }
 
     case ORDER_CREATE_ERROR:
+      return {
+        loading: false,
+        error: action.payload
+      }
+
+    default:
+      return state
+  }
+}
+
+const orderDetailsInitState = {
+  loading: true,
+  orderItems: [],
+  shippingAddress: {}
+}
+
+export const orderDetailsReducer = (state = orderDetailsInitState, action) => {
+  switch (action.type) {
+    case ORDER_DETAILS_REQUEST:
+      return {
+        ...state,
+        loading: true
+      }
+
+    case ORDER_DETAILS_SUCCESS:
+      return {
+        loading: false,
+        order: action.payload
+      }
+
+    case ORDER_DETAILS_ERROR:
       return {
         loading: false,
         error: action.payload
