@@ -16,15 +16,15 @@ const app = express()
 app.use(express.json())
 connectToDB()
 
-// Base Route
-app.get('/', (req, res) => {
-  res.send('API is live!')
-})
-
 // Specific Routes
 app.use('/api', ProductRoutes)
 app.use('/api', UserRoutes)
 app.use('/api', OrderRoutes)
+
+// Paypal Key
+app.get('/api/config/paypal', (req, res) =>
+  res.send(process.env.PAYPAL_CLIENT_ID)
+)
 
 // Error Handlers
 app.use(routeNotFound)

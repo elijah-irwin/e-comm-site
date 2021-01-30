@@ -64,5 +64,7 @@ export const update = (name, email, password) => async (dispatch, getState) => {
 
 export const logout = () => (dispatch) => {
   localStorage.setItem('userDetails', null)
+  localStorage.setItem('shippingAddress', null)
+  localStorage.setItem('paymentMethod', null)
   dispatch({ type: USER_LOGOUT })
 }
