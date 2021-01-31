@@ -4,7 +4,7 @@ const router = express.Router()
 
 import User from '../models/user-model.js'
 import { generateToken } from '../utils/helpers.js'
-import { authenticate } from '../middleware/auth.js'
+import { authenticate, isAdmin } from '../middleware/auth.js'
 
 // @desc    Registers a new user and returns a token
 // @route   POST /api/users
@@ -79,6 +79,14 @@ router.put('/users/profile', authenticate, asyncHandler(async (req, res) => {
     isAdmin: updatedUser.isAdmin,
     token: generateToken(updatedUser._id)
   })
+}))
+
+// @desc    Gets all user's profiles
+// @route   GET /api/users
+// @access  Admin
+router.get('/users', authenticate, isAdmin, asyncHandler(async (req, res) => {
+  const users = await User.find()
+  res.json(users)
 }))
 
 export default router
