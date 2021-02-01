@@ -41,6 +41,20 @@ const Header = () => {
     )
   }
 
+  const renderAdmin = () => {
+    if (userDetails && userDetails.isAdmin) {
+      return (
+        <NavDropdown title='Admin' id='admin'>
+          <NavDropdown.Item as={Link} to='/admin/users'>
+            User List
+          </NavDropdown.Item>
+        </NavDropdown>
+      )
+    }
+
+    return null
+  }
+
   return (
     <header>
       <Navbar bg='light' expand='lg' collapseOnSelect>
@@ -55,6 +69,7 @@ const Header = () => {
               <Nav.Link as={Link} to='/cart'>
                 <i className='fas fa-shopping-cart'></i> Cart
               </Nav.Link>
+              {renderAdmin()}
               {renderSignIn()}
             </Nav>
           </Navbar.Collapse>

@@ -9,7 +9,10 @@ import {
   USER_REGISTER_SUCCESS,
   USER_UPDATE_REQUEST,
   USER_UPDATE_SUCCESS,
-  USER_UPDATE_ERROR
+  USER_UPDATE_ERROR,
+  USER_LIST_REQUEST,
+  USER_LIST_SUCCESS,
+  USER_LIST_ERROR
 } from '../constants'
 
 export const login = (email, password) => async (dispatch) => {
@@ -67,4 +70,24 @@ export const logout = () => (dispatch) => {
   localStorage.setItem('shippingAddress', null)
   localStorage.setItem('paymentMethod', null)
   dispatch({ type: USER_LOGOUT })
+}
+
+export const getUsers = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER_LIST_REQUEST })
+    const reqConfig = {
+      headers: {
+        'Authorization': `Bearer ${getState().user.userDetails.token}`
+      }
+    }
+    const { data } = await axios.get('/api/users', reqConfig)
+    dispatch({ type: USER_LIST_SUCCESS, payload: data })
+  }
+
+  catch (err) {
+    const message = err.response && err.response.data.message
+      ? err.response.data.message
+      : err.message
+    dispatch({ type: USER_LIST_ERROR, payload: message })
+  }
 }
