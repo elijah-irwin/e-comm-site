@@ -4,23 +4,31 @@ import { Link } from 'react-router-dom'
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux'
-import { getUsers } from '../../redux/actions/user-actions'
+import { getUsers, deleteUser } from '../../redux/actions/user-actions'
 
 // Components
 import Loader from '../../components/Loader'
 import Message from '../../components/Message'
 
-const Users = () => {
+const Users = ({ history }) => {
   // Redux
   const dispatch = useDispatch()
   const { loading, users, error } = useSelector(state => state.usersList)
+  const { userDetails } = useSelector(state => state.user)
+  const { success } = useSelector(state => state.userDelete)
 
   useEffect(() => {
-    dispatch(getUsers())
-  }, [dispatch])
+    if (userDetails && userDetails.isAdmin) {
+      dispatch(getUsers())
+    } else {
+      history.push('/login')
+    }
+  }, [dispatch, history, userDetails, success])
 
-  const deleteUser = id => {
-    console.log(id)
+  const deleteUserHandler = id => {
+    if (window.confirm(`Are you sure you want to delete user ${id}?`)) {
+      dispatch(deleteUser(id))
+    }
   }
 
   return (
@@ -66,7 +74,7 @@ const Users = () => {
                   <Button
                     variant='danger'
                     className='btn-sm'
-                    onClick={() => deleteUser(user._id)}
+                    onClick={() => deleteUserHandler(user._id)}
                   >
                     <i className='fas fa-trash'></i>
                   </Button>

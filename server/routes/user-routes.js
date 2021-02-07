@@ -89,4 +89,19 @@ router.get('/users', authenticate, isAdmin, asyncHandler(async (req, res) => {
   res.json(users)
 }))
 
+// @desc    Deletes a user by id
+// @route   DELETE /api/users/:id
+// @access  Admin
+router.delete('/users/:id', authenticate, isAdmin, asyncHandler(async (req, res) => {
+  const result = await User.findByIdAndDelete(req.params.id)
+
+  if (result) {
+    res.json({ message: `User ${req.params.id} deleted successfully.` })
+  } else {
+    res.status(404)
+    throw new Error(`User ${req.params.id} not found.`)
+  }
+
+}))
+
 export default router

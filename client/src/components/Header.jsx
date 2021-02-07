@@ -69,8 +69,8 @@ const Header = () => {
               <Nav.Link as={Link} to='/cart'>
                 <i className='fas fa-shopping-cart'></i> Cart
               </Nav.Link>
-              {renderAdmin()}
               {renderSignIn()}
+              {renderAdmin()}
             </Nav>
           </Navbar.Collapse>
         </Container>
