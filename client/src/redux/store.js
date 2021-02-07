@@ -3,7 +3,7 @@ import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
 // Reducers
-import { productListReducer, productDetailsReducer } from './reducers/product-reducers'
+import { productListReducer, productDetailsReducer, productDeleteReducer } from './reducers/product-reducers'
 import { cartReducer } from './reducers/cart-reducers'
 import { userDeleteReducer, userListReducer, userReducer } from './reducers/user-reducers'
 import { orderCreateReducer, orderDetailsReducer, orderPayReducer, ordersReducer } from './reducers/order-reducers'
@@ -12,6 +12,7 @@ const reducer = combineReducers({
   // key here is actual variable name of the state
   productList: productListReducer,
   productDetails: productDetailsReducer,
+  productDelete: productDeleteReducer,
   cart: cartReducer,
   user: userReducer,
   usersList: userListReducer,

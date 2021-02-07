@@ -1,5 +1,8 @@
 import axios from 'axios'
 import {
+  PRODUCT_DELETE_ERROR,
+  PRODUCT_DELETE_REQUEST,
+  PRODUCT_DELETE_SUCCESS,
   PRODUCT_DETAILS_ERROR,
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS_SUCCESS,
@@ -31,5 +34,26 @@ export const getProductDetails = (id) => async (dispatch) => {
   catch (err) {
     const message = err.response && err.response.data.message ? err.response.data.message : err.message
     dispatch({ type: PRODUCT_DETAILS_ERROR, payload: message })
+  }
+}
+
+export const deleteProduct = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: PRODUCT_DELETE_REQUEST })
+    const reqConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getState().user.userDetails.token}`
+      }
+    }
+    await axios.delete(`/api/products/${id}`, reqConfig)
+    dispatch({ type: PRODUCT_DELETE_SUCCESS })
+  }
+
+  catch (err) {
+    const message = err.response && err.response.data.message
+      ? err.response.data.message
+      : err.message
+    dispatch({ type: PRODUCT_DELETE_ERROR, payload: message })
   }
 }

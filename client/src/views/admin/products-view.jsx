@@ -4,7 +4,10 @@ import { Link } from 'react-router-dom'
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux'
-import { listProducts } from '../../redux/actions/product-actions'
+import {
+  listProducts,
+  deleteProduct,
+} from '../../redux/actions/product-actions'
 
 // Components
 import Loader from '../../components/Loader'
@@ -14,6 +17,9 @@ const Products = ({ history }) => {
   // Redux
   const dispatch = useDispatch()
   const { loading, products, error } = useSelector(state => state.productList)
+  const { success, loading: deleteLoading, error: deleteError } = useSelector(
+    state => state.productDelete
+  )
   const { userDetails } = useSelector(state => state.user)
 
   useEffect(() => {
@@ -22,14 +28,16 @@ const Products = ({ history }) => {
     } else {
       history.push('/login')
     }
-  }, [dispatch, history, userDetails])
+  }, [dispatch, history, userDetails, success])
 
-  const createProductHandler = productId => {
-    console.log(productId)
+  const createProductHandler = () => {
+    console.log('create product')
   }
 
-  const deleteProductHandler = productId => {
-    console.log(productId)
+  const deleteProductHandler = id => {
+    if (window.confirm(`Are you sure you want to delete product ${id}?`)) {
+      dispatch(deleteProduct(id))
+    }
   }
 
   return (
@@ -44,10 +52,10 @@ const Products = ({ history }) => {
           </Button>
         </Col>
       </Row>
-      {loading ? (
+      {loading || deleteLoading ? (
         <Loader />
-      ) : error ? (
-        <Message variant='danger'>{error}</Message>
+      ) : error || deleteError ? (
+        <Message variant='danger'>{error || deleteError}</Message>
       ) : (
         <Table bordered responsive className='table-sm'>
           <thead>
