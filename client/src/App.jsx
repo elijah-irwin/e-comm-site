@@ -18,6 +18,8 @@ import Payment from './views/payment-view'
 import PlaceOrder from './views/place-order-view'
 import Order from './views/order-screen'
 import Users from './views/admin/users-view'
+import UserEdit from './views/admin/user-edit'
+import Products from './views/admin/products-view'
 
 const App = () => {
   return (
@@ -35,7 +37,9 @@ const App = () => {
           <Route path='/payment' component={Payment} />
           <Route path='/place-order' component={PlaceOrder} />
           <Route path='/order/:id' component={Order} />
-          <Route path='/admin/users' component={Users} />
+          <Route exact path='/admin/users' component={Users} />
+          <Route path='/admin/users/:id/edit' component={UserEdit} />
+          <Route exact path='/admin/products' component={Products} />
         </Switch>
       </Container>
       <Footer />

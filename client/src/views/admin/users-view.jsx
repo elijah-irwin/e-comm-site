@@ -65,7 +65,7 @@ const Users = ({ history }) => {
                 <td>
                   <Button
                     as={Link}
-                    to={`/admin/user/${user._id}/edit`}
+                    to={`/admin/users/${user._id}/edit`}
                     variant='light'
                     className='btn-sm'
                   >
