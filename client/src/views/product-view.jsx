@@ -5,6 +5,7 @@ import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
 // Redux
 import { useDispatch, useSelector } from 'react-redux'
 import { getProductDetails } from '../redux/actions/product-actions'
+import { PRODUCT_DETAILS_RESET } from '../redux/constants'
 
 // Components
 import Rating from '../components/Rating'
@@ -20,6 +21,10 @@ const Product = ({ history }) => {
 
   useEffect(() => {
     dispatch(getProductDetails(id))
+
+    return () => {
+      dispatch({ type: PRODUCT_DETAILS_RESET })
+    }
 
     // return dispatch to clear product details state so its clear for next renders
   }, [dispatch, id])
