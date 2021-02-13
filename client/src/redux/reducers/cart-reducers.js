@@ -41,6 +41,11 @@ export const cartReducer = (state = { cartItems: [], shippingAddress: {} }, acti
         paymentMethod: action.payload
       }
 
+    case 'CART_CLEAR_CART':
+      return {
+        cartItems: [], shippingAddress: {}
+      }
+
     default:
       return state
   }

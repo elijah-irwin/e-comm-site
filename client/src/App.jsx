@@ -21,6 +21,7 @@ import Users from './views/admin/users-view'
 import UserEdit from './views/admin/user-edit'
 import Products from './views/admin/products-view'
 import ProductEdit from './views/admin/product-edit'
+import Orders from './views/admin/orders-view'
 
 const App = () => {
   return (
@@ -42,6 +43,7 @@ const App = () => {
           <Route path='/admin/users/:id/edit' component={UserEdit} />
           <Route exact path='/admin/products' component={Products} />
           <Route path='/admin/products/:id/edit' component={ProductEdit} />
+          <Route exact path='/admin/orders' component={Orders} />
         </Switch>
       </Container>
       <Footer />

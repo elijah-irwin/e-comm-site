@@ -2,7 +2,7 @@ import express from 'express'
 import asyncHandler from 'express-async-handler'
 const router = express.Router()
 
-import { authenticate } from '../middleware/auth.js'
+import { authenticate, isAdmin } from '../middleware/auth.js'
 import Order from '../models/order-model.js'
 
 // @desc    Create new order
@@ -44,6 +44,14 @@ router.post('/orders', authenticate, asyncHandler(async (req, res) => {
 // @access  Private
 router.get('/orders', authenticate, asyncHandler(async (req, res) => {
   const orders = await Order.find({ user: req.user._id })
+  res.json(orders)
+}))
+
+// @desc    Get logged in user's orders
+// @route   GET /api/orders
+// @access  Private
+router.get('/orders/all', authenticate, isAdmin, asyncHandler(async (req, res) => {
+  const orders = await Order.find({}).populate('user', 'name email')
   res.json(orders)
 }))
 
