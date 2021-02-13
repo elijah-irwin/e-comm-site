@@ -1,4 +1,6 @@
 import express from 'express'
+import multer from 'multer'
+import path from 'path'
 import asyncHandler from 'express-async-handler'
 const router = express.Router()
 
@@ -85,5 +87,47 @@ router.delete('/products/:id', authenticate, isAdmin, asyncHandler(async (req, r
     throw new Error(`Product ${req.params.id} not found.`)
   }
 }))
+
+
+/****************************
+ * Multer Helpers & Routes
+ ***************************/
+const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, 'uploads/')
+  },
+  filename(req, file, cb) {
+    cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`)
+  }
+})
+
+function checkFileType(file, cb) {
+  const filetypes = /jpg|jpeg|png/
+  const extname = filetypes.test(path.extname(file.originalname).toLocaleLowerCase())
+  const mimetype = filetypes.test(file.mimetype)
+
+  if (extname && mimetype) return cb(null, true)
+  else return cb('Images of type jpg, jpeg, & png only.')
+}
+
+const upload = multer({
+  storage,
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb)
+  }
+})
+
+// @desc    Uploads an image to the diskStorage
+// @route   POST /api/products/:id
+// @access  Admin
+router.post('/products/image', upload.single('image'), (req, res) => {
+  res.send(`/uploads/${req.file.filename}`)
+})
+
+
+
+
+
+
 
 export default router

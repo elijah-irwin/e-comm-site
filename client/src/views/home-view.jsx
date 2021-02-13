@@ -16,6 +16,9 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(listProducts())
+    return () => {
+      dispatch({ type: 'PRODUCT_LIST_RESET' })
+    }
     // cleannup product list data here so it does dbl flash on reload
   }, [dispatch])
 

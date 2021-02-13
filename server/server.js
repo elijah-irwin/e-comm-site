@@ -1,5 +1,6 @@
 // Libraries
 import express from 'express'
+import path from 'path'
 import chalk from 'chalk'
 import dotenv from 'dotenv'
 dotenv.config()
@@ -20,6 +21,10 @@ connectToDB()
 app.use('/api', ProductRoutes)
 app.use('/api', UserRoutes)
 app.use('/api', OrderRoutes)
+
+// Images Folder
+const __dirname = path.resolve()
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 
 // Paypal Key
 app.get('/api/config/paypal', (req, res) =>
