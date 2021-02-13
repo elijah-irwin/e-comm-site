@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Table, Button, Row, Col } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux'
@@ -14,13 +15,13 @@ import Loader from '../../components/Loader'
 import Message from '../../components/Message'
 
 const Products = ({ history }) => {
-  // Redux
   const dispatch = useDispatch()
   const { loading, products, error } = useSelector(state => state.productList)
   const { success, loading: deleteLoading, error: deleteError } = useSelector(
     state => state.productDelete
   )
   const { userDetails } = useSelector(state => state.user)
+  const [createError, setCreateError] = useState()
 
   useEffect(() => {
     if (userDetails && userDetails.isAdmin) {
@@ -31,7 +32,18 @@ const Products = ({ history }) => {
   }, [dispatch, history, userDetails, success])
 
   const createProductHandler = () => {
-    console.log('create product')
+    axios
+      .post(
+        '/api/products',
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${userDetails.token}`,
+          },
+        }
+      )
+      .then(res => history.push(`/admin/products/${res.data._id}/edit`))
+      .catch(err => setCreateError(err))
   }
 
   const deleteProductHandler = id => {
@@ -54,8 +66,10 @@ const Products = ({ history }) => {
       </Row>
       {loading || deleteLoading ? (
         <Loader />
-      ) : error || deleteError ? (
-        <Message variant='danger'>{error || deleteError}</Message>
+      ) : error || deleteError || createError ? (
+        <Message variant='danger'>
+          {error || deleteError || createError}
+        </Message>
       ) : (
         <Table bordered responsive className='table-sm'>
           <thead>

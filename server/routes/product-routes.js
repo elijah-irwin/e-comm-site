@@ -64,7 +64,7 @@ router.put('/products/:id', authenticate, isAdmin, asyncHandler(async (req, res)
   product.description = description
   product.image = image
   product.brand = brand
-  product.catcategory = category
+  product.category = category
   product.countInStock = countInStock
 
   const updatedProduct = await product.save()
