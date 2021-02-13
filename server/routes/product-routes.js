@@ -27,6 +27,51 @@ router.get('/products/:id', asyncHandler(async (req, res) => {
   }
 }))
 
+// @desc    Create a product
+// @route   POST /api/products
+// @access  Admin
+router.post('/products', authenticate, isAdmin, asyncHandler(async (req, res) => {
+  const product = new Product({
+    name: 'Sample Name',
+    price: 0,
+    user: req.user._id,
+    image: '/images/sample.jpg',
+    brand: 'Sample Brand',
+    category: 'Sample Category',
+    countInStock: 0,
+    numReview: 0,
+    description: 'Sample Description'
+  })
+
+  const createdProduct = await product.save()
+  res.status(201).json(createdProduct)
+}))
+
+// @desc    Update a product
+// @route   PUT /api/products/:id
+// @access  Admin
+router.put('/products/:id', authenticate, isAdmin, asyncHandler(async (req, res) => {
+
+  const product = await Product.findById(req.params.id)
+  if (!product) {
+    res.status(404)
+    throw new Error('Product Not Found.')
+  }
+
+  const { name, price, description, image, brand, category, countInStock } = req.body
+  product.name = name
+  product.price = price
+  product.description = description
+  product.image = image
+  product.brand = brand
+  product.catcategory = category
+  product.countInStock = countInStock
+
+  const updatedProduct = await product.save()
+  res.json(updatedProduct)
+}))
+
+
 // @desc    Deletes a specified product
 // @route   DELETE /api/products/:id
 // @access  Admin
