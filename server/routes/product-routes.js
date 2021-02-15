@@ -49,6 +49,38 @@ router.post('/products', authenticate, isAdmin, asyncHandler(async (req, res) =>
   res.status(201).json(createdProduct)
 }))
 
+// @desc    Create a reviews
+// @route   POST /api/products/:id/reviews
+// @access  Private
+router.post('/products/:id/reviews', authenticate, asyncHandler(async (req, res) => {
+
+  const product = await Product.findById(req.params.id)
+  if (!product) {
+    res.status(404)
+    throw new Error('No Product Found.')
+  }
+
+  const alreadyReviewed = product.reviews.find(r => r.user.toString() === req.user._id.toString())
+  if (alreadyReviewed) {
+    res.status(400)
+    throw new Error('Error: You have already reviewed this product.')
+  }
+
+  const { comment, rating } = req.body
+  const review = {
+    name: req.user.name,
+    rating: Number(rating),
+    comment,
+    user: req.user._id
+  }
+  product.reviews.push(review)
+  product.numReviews = product.reviews.length
+  product.rating = product.reviews.reduce((acc, review) => review.rating + acc, 0) / product.numReviews
+
+  await product.save()
+  res.json({ message: 'Review successfully added.' })
+}))
+
 // @desc    Update a product
 // @route   PUT /api/products/:id
 // @access  Admin
@@ -123,11 +155,5 @@ const upload = multer({
 router.post('/products/image', upload.single('image'), (req, res) => {
   res.send(`/uploads/${req.file.filename}`)
 })
-
-
-
-
-
-
 
 export default router

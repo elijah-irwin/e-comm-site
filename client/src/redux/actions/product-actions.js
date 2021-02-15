@@ -57,3 +57,25 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
     dispatch({ type: PRODUCT_DELETE_ERROR, payload: message })
   }
 }
+
+export const createProductReview = (productId, review) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: 'PRODUCT_REVIEW_CREATE_REQUEST' })
+    const reqConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getState().user.userDetails.token}`
+      }
+    }
+
+    await axios.post(`/api/products/${productId}/reviews`, review, reqConfig)
+    dispatch({ type: 'PRODUCT_REVIEW_CREATE_SUCCESS' })
+  }
+
+  catch (err) {
+    const message = err.response && err.response.data.message
+      ? err.response.data.message
+      : err.message
+    dispatch({ type: 'PRODUCT_REVIEW_CREATE_ERROR', payload: message })
+  }
+}

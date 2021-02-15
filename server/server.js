@@ -1,6 +1,7 @@
 // Libraries
 import express from 'express'
 import path from 'path'
+import morgan from 'morgan'
 import chalk from 'chalk'
 import dotenv from 'dotenv'
 dotenv.config()
@@ -16,6 +17,11 @@ import { errorHandler, routeNotFound } from './middleware/error-handlers.js'
 const app = express()
 app.use(express.json())
 connectToDB()
+
+// Morgan Logger
+if (process.env.NODE_ENV === 'dev') {
+  app.use(morgan('dev'))
+}
 
 // Specific Routes
 app.use('/api', ProductRoutes)

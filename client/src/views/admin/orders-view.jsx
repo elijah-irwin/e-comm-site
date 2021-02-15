@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Table, Button, Row, Col } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Table } from 'react-bootstrap'
 
 // Redux
 import { useSelector } from 'react-redux'
@@ -13,7 +12,7 @@ import Message from '../../components/Message'
 const Orders = ({ history }) => {
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
+  const [error, setError] = useState()
 
   const { userDetails } = useSelector(state => state.user)
 
@@ -34,7 +33,7 @@ const Orders = ({ history }) => {
         setError(err)
         setLoading(false)
       })
-  }, [])
+  }, [history, userDetails])
 
   return (
     <>
@@ -42,7 +41,7 @@ const Orders = ({ history }) => {
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant='danger'>{error}</Message>
+        <Message variant='danger'>{error.message}</Message>
       ) : (
         <Table bordered responsive className='table-sm'>
           <thead>

@@ -4,7 +4,10 @@ import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux'
-import { getProductDetails } from '../redux/actions/product-actions'
+import {
+  getProductDetails,
+  createProductReview,
+} from '../redux/actions/product-actions'
 import { PRODUCT_DETAILS_RESET } from '../redux/constants'
 
 // Components
@@ -12,114 +15,189 @@ import Rating from '../components/Rating'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 
-const Product = ({ history }) => {
+const Product = ({ history, match }) => {
   const [qty, setQty] = useState(1)
+  const [review, setReview] = useState({
+    rating: 0,
+    comment: '',
+  })
 
   const { id } = useParams()
+
   const dispatch = useDispatch()
+  const { userDetails } = useSelector(state => state.user)
   const { loading, product, error } = useSelector(state => state.productDetails)
+  const { success: crSuccess, error: crError } = useSelector(
+    state => state.productReviewCreate
+  )
 
   useEffect(() => {
     dispatch(getProductDetails(id))
-
+    if (crSuccess) {
+      setReview({ rating: 0, comment: '' })
+      dispatch({ type: 'PRODUCT_REVIEW_CREATE_RESET' })
+    }
     return () => {
       dispatch({ type: PRODUCT_DETAILS_RESET })
     }
-
-    // return dispatch to clear product details state so its clear for next renders
-  }, [dispatch, id])
+  }, [dispatch, id, crSuccess])
 
   const addToCart = () => {
     history.push(`/cart/${id}?qty=${qty}`)
+  }
+
+  const reviewForm = e => {
+    e.preventDefault()
+    dispatch(createProductReview(match.params.id, review))
   }
 
   const renderContent = () => {
     if (loading) return <Loader />
     if (error) return <Message variant='danger'>{error}</Message>
     return (
-      <Row>
-        <Col md={12} lg={6}>
-          <Image
-            src={product.image}
-            alt={product.name}
-            fluid
-            style={{ width: '100%' }}
-          />
-        </Col>
+      <>
+        <Row>
+          <Col md={12} lg={6}>
+            <Image
+              src={product.image}
+              alt={product.name}
+              fluid
+              style={{ width: '100%' }}
+            />
+          </Col>
 
-        <Col md={12} lg={3}>
-          <ListGroup variant='flush'>
-            <ListGroup.Item>
-              <h3>{product.name}</h3>
-            </ListGroup.Item>
-            <ListGroup.Item>
-              <Rating
-                value={product.rating}
-                text={`${product.numReviews} reviews`}
-              />
-            </ListGroup.Item>
-            <ListGroup.Item>Price: ${product.price}</ListGroup.Item>
-            <ListGroup.Item>{product.description}</ListGroup.Item>
-          </ListGroup>
-        </Col>
-
-        <Col md={12} lg={3}>
-          <Card>
+          <Col md={12} lg={3}>
             <ListGroup variant='flush'>
               <ListGroup.Item>
-                <Row>
-                  <Col>Price:</Col>
-                  <Col>
-                    <strong>${product.price}</strong>
-                  </Col>
-                </Row>
+                <h3>{product.name}</h3>
               </ListGroup.Item>
               <ListGroup.Item>
-                <Row>
-                  <Col>Status:</Col>
-                  <Col>
-                    {product.countInStock > 0 ? 'In Stock' : 'Out of Stock'}
-                  </Col>
-                </Row>
+                <Rating
+                  value={product.rating}
+                  text={`${product.numReviews} reviews`}
+                />
               </ListGroup.Item>
+              <ListGroup.Item>Price: ${product.price}</ListGroup.Item>
+              <ListGroup.Item>{product.description}</ListGroup.Item>
+            </ListGroup>
+          </Col>
 
-              {product.countInStock > 0 && (
+          <Col md={12} lg={3}>
+            <Card>
+              <ListGroup variant='flush'>
                 <ListGroup.Item>
                   <Row>
-                    <Col style={{ display: 'flex', alignItems: 'center' }}>
-                      Quantity
-                    </Col>
+                    <Col>Price:</Col>
                     <Col>
-                      <Form.Control
-                        as='select'
-                        value={qty}
-                        onChange={e => setQty(e.target.value)}
-                      >
-                        {[...Array(product.countInStock).keys()].map(x => (
-                          <option value={x + 1} key={x + 1}>
-                            {x + 1}
-                          </option>
-                        ))}
-                      </Form.Control>
+                      <strong>${product.price}</strong>
                     </Col>
                   </Row>
                 </ListGroup.Item>
-              )}
+                <ListGroup.Item>
+                  <Row>
+                    <Col>Status:</Col>
+                    <Col>
+                      {product.countInStock > 0 ? 'In Stock' : 'Out of Stock'}
+                    </Col>
+                  </Row>
+                </ListGroup.Item>
 
-              <ListGroup.Item>
-                <Button
-                  className='btn-block'
-                  type='button'
-                  disabled={product.countInStock === 0}
-                  onClick={addToCart}
-                >
-                  Add To Card
-                </Button>
-              </ListGroup.Item>
-            </ListGroup>
-          </Card>
-        </Col>
-      </Row>
+                {product.countInStock > 0 && (
+                  <ListGroup.Item>
+                    <Row>
+                      <Col style={{ display: 'flex', alignItems: 'center' }}>
+                        Quantity
+                      </Col>
+                      <Col>
+                        <Form.Control
+                          as='select'
+                          value={qty}
+                          onChange={e => setQty(e.target.value)}
+                        >
+                          {[...Array(product.countInStock).keys()].map(x => (
+                            <option value={x + 1} key={x + 1}>
+                              {x + 1}
+                            </option>
+                          ))}
+                        </Form.Control>
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
+                )}
+
+                <ListGroup.Item>
+                  <Button
+                    className='btn-block'
+                    type='button'
+                    disabled={product.countInStock === 0}
+                    onClick={addToCart}
+                  >
+                    Add To Card
+                  </Button>
+                </ListGroup.Item>
+              </ListGroup>
+            </Card>
+          </Col>
+        </Row>
+        {userDetails && (
+          <Row>
+            <Col md={6}>
+              <h2 style={{ marginTop: '20px' }}>Reviews</h2>
+              {product.reviews.length === 0 && (
+                <Message variant='info'>No reviews yet...</Message>
+              )}
+              <ListGroup variant='flush'>
+                {product.reviews.map(rev => (
+                  <ListGroup.Item key={rev._id} style={{ padding: '0px' }}>
+                    <strong>{rev.name}</strong>
+                    <Rating value={rev.rating} />
+                    <p>{rev.createdAt.substring(0, 10)}</p>
+                    <p>{rev.comment}</p>
+                  </ListGroup.Item>
+                ))}
+                <ListGroup.Item style={{ padding: '0px' }}>
+                  <h3 style={{ paddingTop: '10px' }}>Write a Review!</h3>
+                  {crError && <Message variant='danger'>{crError}</Message>}
+                  <Form onSubmit={reviewForm}>
+                    <Form.Group controlId='rating'>
+                      <Form.Label>Rating</Form.Label>
+                      <Form.Control
+                        as='select'
+                        value={review.rating}
+                        onChange={e =>
+                          setReview({ ...review, rating: e.target.value })
+                        }
+                      >
+                        <option value=''>Select a rating.</option>
+                        <option value='1'>1</option>
+                        <option value='2'>2</option>
+                        <option value='3'>3</option>
+                        <option value='4'>4</option>
+                        <option value='5'>5</option>
+                      </Form.Control>
+                    </Form.Group>
+                    <Form.Group controlId='comment'>
+                      <Form.Label>Review</Form.Label>
+                      <Form.Control
+                        as='textarea'
+                        row='3'
+                        value={review.comment}
+                        placeholder='Review...'
+                        onChange={e =>
+                          setReview({ ...review, comment: e.target.value })
+                        }
+                      />
+                    </Form.Group>
+                    <Button type='submit' variant='primary'>
+                      Submit
+                    </Button>
+                  </Form>
+                </ListGroup.Item>
+              </ListGroup>
+            </Col>
+          </Row>
+        )}
+      </>
     )
   }
 
