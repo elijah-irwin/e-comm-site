@@ -13,23 +13,27 @@ import {
 // Components
 import Loader from '../../components/Loader'
 import Message from '../../components/Message'
+import Paginate from '../../components/Paginate'
 
-const Products = ({ history }) => {
+const Products = ({ history, match }) => {
   const dispatch = useDispatch()
-  const { loading, products, error } = useSelector(state => state.productList)
+  const { loading, products, page, pages, error } = useSelector(
+    state => state.productList
+  )
   const { success, loading: deleteLoading, error: deleteError } = useSelector(
     state => state.productDelete
   )
   const { userDetails } = useSelector(state => state.user)
   const [createError, setCreateError] = useState()
+  const pageNumber = match.params.pageNumber || 1
 
   useEffect(() => {
     if (userDetails && userDetails.isAdmin) {
-      dispatch(listProducts())
+      dispatch(listProducts('', pageNumber))
     } else {
       history.push('/login')
     }
-  }, [dispatch, history, userDetails, success])
+  }, [dispatch, history, userDetails, success, pageNumber])
 
   const createProductHandler = () => {
     axios
@@ -71,48 +75,51 @@ const Products = ({ history }) => {
           {error || deleteError || createError}
         </Message>
       ) : (
-        <Table bordered responsive className='table-sm'>
-          <thead>
-            <tr>
-              <th>Product Id</th>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Category</th>
-              <th>Brand</th>
-              <th>Stock</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map(product => (
-              <tr key={product._id}>
-                <td>{product._id}</td>
-                <td>{product.name}</td>
-                <td>${product.price}</td>
-                <td>{product.category}</td>
-                <td>{product.brand}</td>
-                <td>{product.countInStock}</td>
-                <td>
-                  <Button
-                    as={Link}
-                    to={`/admin/products/${product._id}/edit`}
-                    variant='light'
-                    className='btn-sm'
-                  >
-                    <i className='fas fa-edit'></i>
-                  </Button>
-                  <Button
-                    variant='danger'
-                    className='btn-sm'
-                    onClick={() => deleteProductHandler(product._id)}
-                  >
-                    <i className='fas fa-trash'></i>
-                  </Button>
-                </td>
+        <>
+          <Table bordered responsive className='table-sm'>
+            <thead>
+              <tr>
+                <th>Product Id</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Category</th>
+                <th>Brand</th>
+                <th>Stock</th>
+                <th></th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
+            </thead>
+            <tbody>
+              {products.map(product => (
+                <tr key={product._id}>
+                  <td>{product._id}</td>
+                  <td>{product.name}</td>
+                  <td>${product.price}</td>
+                  <td>{product.category}</td>
+                  <td>{product.brand}</td>
+                  <td>{product.countInStock}</td>
+                  <td>
+                    <Button
+                      as={Link}
+                      to={`/admin/products/${product._id}/edit`}
+                      variant='light'
+                      className='btn-sm'
+                    >
+                      <i className='fas fa-edit'></i>
+                    </Button>
+                    <Button
+                      variant='danger'
+                      className='btn-sm'
+                      onClick={() => deleteProductHandler(product._id)}
+                    >
+                      <i className='fas fa-trash'></i>
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <Paginate pages={pages} page={page} isAdmin={true} />
+        </>
       )}
     </>
   )

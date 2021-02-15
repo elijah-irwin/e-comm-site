@@ -9,38 +9,44 @@ import { listProducts } from '../redux/actions/product-actions'
 import Product from '../components/Product'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
+import Paginate from '../components/Paginate'
 
-const Home = () => {
+const Home = ({ match }) => {
+  const keyword = match.params.keyword
+  const pageNumber = match.params.pageNumber || 1
+
+  // Redux
   const dispatch = useDispatch()
-  const { loading, products, error } = useSelector(state => state.productList)
+  const { loading, products, pages, page, error } = useSelector(
+    state => state.productList
+  )
 
   useEffect(() => {
-    dispatch(listProducts())
+    dispatch(listProducts(keyword, pageNumber))
     return () => {
       dispatch({ type: 'PRODUCT_LIST_RESET' })
     }
-    // cleannup product list data here so it does dbl flash on reload
-  }, [dispatch])
-
-  const renderContent = () => {
-    if (loading) return <Loader />
-    if (error) return <Message variant='danger'>{error}</Message>
-
-    return (
-      <Row>
-        {products.map(product => (
-          <Col sm={12} md={6} lg={4} xl={3} key={product.name}>
-            <Product product={product} />
-          </Col>
-        ))}
-      </Row>
-    )
-  }
+  }, [dispatch, keyword, pageNumber])
 
   return (
     <>
       <h1>Latest Products</h1>
-      {renderContent()}
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <Message variant='danger'>{error}</Message>
+      ) : (
+        <>
+          <Row>
+            {products.map(product => (
+              <Col sm={12} md={6} lg={4} xl={3} key={product.name}>
+                <Product product={product} />
+              </Col>
+            ))}
+          </Row>
+          <Paginate pages={pages} page={page} keyword={keyword} />
+        </>
+      )}
     </>
   )
 }
