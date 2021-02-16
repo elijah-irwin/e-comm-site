@@ -10,6 +10,7 @@ import Product from '../components/Product'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import Paginate from '../components/Paginate'
+import TopProducts from '../components/TopProducts'
 
 const Home = ({ match }) => {
   const keyword = match.params.keyword
@@ -30,13 +31,14 @@ const Home = ({ match }) => {
 
   return (
     <>
-      <h1>Latest Products</h1>
+      {!keyword && <TopProducts />}
       {loading ? (
         <Loader />
       ) : error ? (
         <Message variant='danger'>{error}</Message>
       ) : (
         <>
+          <h1>Latest Products</h1>
           <Row>
             {products.map(product => (
               <Col sm={12} md={6} lg={4} xl={3} key={product.name}>

@@ -27,6 +27,14 @@ router.get('/products', asyncHandler(async (req, res) => {
   res.json({ products, page, pages: Math.ceil(count / pageSize) })
 }))
 
+// @desc    Returns top rated products
+// @route   GET /api/products/top-rated
+// @access  Public
+router.get('/products/top-rated', asyncHandler(async (req, res) => {
+  const products = await Product.find({}).sort({ rating: -1 }).limit(3)
+  res.json(products)
+}))
+
 // @desc    Returns a single specified product
 // @route   GET /api/products/:id
 // @access  Public
