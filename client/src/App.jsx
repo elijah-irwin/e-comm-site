@@ -23,6 +23,11 @@ import Products from './views/admin/products-view'
 import ProductEdit from './views/admin/product-edit'
 import Orders from './views/admin/orders-view'
 
+/*****************************************************************
+ * NOTE: This project was created by loosly following a tutorial.
+ * There is a lot of code I dont agree with but I dont plan on
+ * changing it as this was a learning project.
+ ****************************************************************/
 const App = () => {
   return (
     <Router>

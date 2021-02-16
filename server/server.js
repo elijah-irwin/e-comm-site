@@ -28,14 +28,22 @@ app.use('/api', ProductRoutes)
 app.use('/api', UserRoutes)
 app.use('/api', OrderRoutes)
 
-// Images Folder
-const __dirname = path.resolve()
-app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
-
 // Paypal Key
 app.get('/api/config/paypal', (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
 )
+
+// Images Folder
+const __dirname = path.resolve()
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
+
+// Prod Build
+if (process.env.NODE_ENV === 'prod') {
+  app.use(express.static(path.join(__dirname, '/client/build')))
+  app.get('/*', (req, res) => {
+    res.send(path.join(__dirname, '/client/build/index.html'))
+  })
+}
 
 // Error Handlers
 app.use(routeNotFound)
