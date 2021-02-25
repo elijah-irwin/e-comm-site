@@ -23,7 +23,7 @@ export const login = (email, password) => async (dispatch) => {
     dispatch({ type: USER_LOGIN_REQUEST })
     const reqConfig = { headers: { 'Content-Type': 'application/json' } }
     const { data } = await axios.post('/api/users/login', { email, password }, reqConfig)
-    localStorage.setItem('userDetails', JSON.stringify(data))
+    sessionStorage.setItem('userDetails', JSON.stringify(data))
     dispatch({ type: USER_LOGIN_SUCCESS, payload: data })
   }
 
@@ -38,7 +38,7 @@ export const register = (name, email, password) => async (dispatch) => {
     dispatch({ type: USER_REGISTER_REQUEST })
     const reqConfig = { headers: { 'Content-Type': 'application/json' } }
     const { data } = await axios.post('/api/users', { name, email, password }, reqConfig)
-    localStorage.setItem('userDetails', JSON.stringify(data))
+    sessionStorage.setItem('userDetails', JSON.stringify(data))
     dispatch({ type: USER_REGISTER_SUCCESS, payload: data })
   }
 
@@ -58,7 +58,7 @@ export const update = (name, email, password) => async (dispatch, getState) => {
       }
     }
     const { data } = await axios.put(`/api/users/profile`, { name, email, password }, reqConfig)
-    localStorage.setItem('userDetails', JSON.stringify(data))
+    sessionStorage.setItem('userDetails', JSON.stringify(data))
     dispatch({ type: USER_UPDATE_SUCCESS, payload: data })
   }
 
@@ -69,9 +69,9 @@ export const update = (name, email, password) => async (dispatch, getState) => {
 }
 
 export const logout = () => (dispatch) => {
-  localStorage.setItem('userDetails', null)
-  localStorage.setItem('shippingAddress', null)
-  localStorage.setItem('paymentMethod', null)
+  sessionStorage.setItem('userDetails', null)
+  sessionStorage.setItem('shippingAddress', null)
+  sessionStorage.setItem('paymentMethod', null)
   dispatch({ type: USER_LOGOUT })
 }
 

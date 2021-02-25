@@ -73,7 +73,7 @@ const Profile = ({ history }) => {
           </Form.Group>
 
           <Form.Group controlId='password'>
-            <Form.Label>Password</Form.Label>
+            <Form.Label>Password Update</Form.Label>
             <Form.Control
               type='password'
               placeholder='**********'
@@ -83,7 +83,7 @@ const Profile = ({ history }) => {
           </Form.Group>
 
           <Form.Group controlId='confirmPassword'>
-            <Form.Label>Confirm Password</Form.Label>
+            <Form.Label>Confirm Password Update</Form.Label>
             <Form.Control
               type='password'
               placeholder='**********'

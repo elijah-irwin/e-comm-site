@@ -22,7 +22,7 @@ export const addToCart = (id, qty) => async (dispatch, getState) => {
   })
 
   const cartItems = JSON.stringify(getState().cart.cartItems)
-  localStorage.setItem('cartItems', cartItems)
+  sessionStorage.setItem('cartItems', cartItems)
 }
 
 export const removeFromCart = (id) => (dispatch, getState) => {
@@ -32,7 +32,7 @@ export const removeFromCart = (id) => (dispatch, getState) => {
   })
 
   const cartItems = JSON.stringify(getState().cart.cartItems)
-  localStorage.setItem('cartItems', cartItems)
+  sessionStorage.setItem('cartItems', cartItems)
 }
 
 export const saveShippingAddress = (address) => (dispatch) => {
@@ -42,7 +42,7 @@ export const saveShippingAddress = (address) => (dispatch) => {
   })
 
   const shippingAddress = JSON.stringify(address)
-  localStorage.setItem('shippingAddress', shippingAddress)
+  sessionStorage.setItem('shippingAddress', shippingAddress)
 }
 
 export const savePaymentMethod = (payment) => (dispatch) => {
@@ -52,5 +52,5 @@ export const savePaymentMethod = (payment) => (dispatch) => {
   })
 
   const paymentMethod = JSON.stringify(payment)
-  localStorage.setItem('paymentMethod', paymentMethod)
+  sessionStorage.setItem('paymentMethod', paymentMethod)
 }

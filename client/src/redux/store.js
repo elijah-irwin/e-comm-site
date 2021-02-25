@@ -24,29 +24,29 @@ const reducer = combineReducers({
   orders: ordersReducer
 })
 
-const cartItemsFromLocalStorage = localStorage.getItem('cartItems')
-  ? JSON.parse(localStorage.getItem('cartItems'))
+const cartItemsFromSessionStorage = sessionStorage.getItem('cartItems')
+  ? JSON.parse(sessionStorage.getItem('cartItems'))
   : []
 
-const userFromLocalStorage = localStorage.getItem('userDetails')
-  ? JSON.parse(localStorage.getItem('userDetails'))
+const userFromSessionStorage = sessionStorage.getItem('userDetails')
+  ? JSON.parse(sessionStorage.getItem('userDetails'))
   : null
 
-const shippingAddressFromLocalStorage = localStorage.getItem('shippingAddress')
-  ? JSON.parse(localStorage.getItem('shippingAddress'))
+const shippingAddressFromSessionStorage = sessionStorage.getItem('shippingAddress')
+  ? JSON.parse(sessionStorage.getItem('shippingAddress'))
   : {}
 
-const paymentMethodFromLocalStorage = localStorage.getItem('paymentMethod')
-  ? JSON.parse(localStorage.getItem('paymentMethod'))
+const paymentMethodFromSessionStorage = sessionStorage.getItem('paymentMethod')
+  ? JSON.parse(sessionStorage.getItem('paymentMethod'))
   : {}
 
 const initialState = {
   cart: {
-    cartItems: cartItemsFromLocalStorage,
-    shippingAddress: shippingAddressFromLocalStorage,
-    paymentMethod: paymentMethodFromLocalStorage
+    cartItems: cartItemsFromSessionStorage,
+    shippingAddress: shippingAddressFromSessionStorage,
+    paymentMethod: paymentMethodFromSessionStorage
   },
-  user: { userDetails: userFromLocalStorage },
+  user: { userDetails: userFromSessionStorage },
 }
 
 const middleware = [thunk]
