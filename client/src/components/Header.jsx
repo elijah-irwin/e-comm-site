@@ -69,7 +69,7 @@ const Header = () => {
       <Navbar bg='light' expand='lg' collapseOnSelect>
         <Container>
           <Navbar.Brand as={Link} to='/'>
-            Maks Custom Keys
+            My Mechs
           </Navbar.Brand>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
 
