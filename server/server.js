@@ -40,8 +40,8 @@ app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 // Prod Build
 if (process.env.NODE_ENV === 'prod') {
   app.use(express.static(path.join(__dirname, '/client/build')))
-  app.get('/*', (req, res) => {
-    res.send(path.join(__dirname, '/client/build/index.html'))
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '/client/build', 'index.html'))
   })
 }
 
