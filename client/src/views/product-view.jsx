@@ -132,7 +132,7 @@ const Product = ({ history, match }) => {
                     disabled={product.countInStock === 0}
                     onClick={addToCart}
                   >
-                    Add To Card
+                    Add To Cart
                   </Button>
                 </ListGroup.Item>
               </ListGroup>
